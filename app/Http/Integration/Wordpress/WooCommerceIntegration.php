@@ -25,17 +25,12 @@ class WooCommerceIntegration
     public function execute($type, $endpoint, $params = [], $data = [])
     {
         return match ($type) {
-            'GET' => $this->get($endpoint, $params),
             'POST' => $this->post($endpoint, $data),
             'PUT' => $this->put($endpoint, $data),
-            'DELETE' => $this->delete($endpoint)
+            'GET' => $this->get($endpoint, $params),
+            'DELETE' => $this->delete($endpoint, $params),
+            'OPTIONS' => $this->options($endpoint)
         };
-    }
-
-    private function get($endpoint)
-    {
-        $response = $this->woocommerce->get($endpoint, $params);
-        return $response;
     }
 
     private function post($endpoint, $data)
@@ -50,9 +45,21 @@ class WooCommerceIntegration
         return $response;
     }
 
-    private function delete($endpoint)
+    private function get($endpoint, $params)
     {
-        $response = $this->woocommerce->delete($endpoint);
+        $response = $this->woocommerce->get($endpoint, $params);
+        return $response;
+    }
+
+    private function delete($endpoint, $params)
+    {
+        $response = $this->woocommerce->delete($endpoint, $params);
+        return $response;
+    }
+
+    private function options($endpoint)
+    {
+        $response = $this->woocommerce->options($endpoint);
         return $response;
     }
 }
