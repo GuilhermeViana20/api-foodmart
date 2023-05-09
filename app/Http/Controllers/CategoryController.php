@@ -21,10 +21,8 @@ class CategoryController extends Controller
         })->values();
     }
 
-    public function menus_categories(Request $request)
+    public function menus_categories()
     {
-        $category_id = $request->query('categoryId');
-
         $options = [
             'id' => 0,
             'name' => 'TODOS',
@@ -36,11 +34,6 @@ class CategoryController extends Controller
         $categories = collect($categories)->reject(function($category) {
             return empty($category->image);
         })->values();
-
-        $query = $category_id != 0 ? 'products?category='.$category_id : 'products';
-
-        $products = (new WooCommerceIntegration)->execute('GET', $query);
-        return $products;
 
         return (new MapFields)->execute($categories, ['id', 'name', 'slug', 'image'])->prepend($options);
     }
